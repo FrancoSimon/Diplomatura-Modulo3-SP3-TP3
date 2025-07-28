@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Superhéroes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .hero-card {
+            transition: transform 0.3s;
+        }
+        .hero-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Dashboard de Superhéroes</h1>
+        
+        <div class="d-flex justify-content-between mb-4">
+            <h2>Lista de Superhéroes</h2>
+            <a href="/heroes/agregar" class="btn btn-primary">Agregar Superhéroe</a>
+        </div>
+
+        <% if (superheroes.length === 0) { %>
+            <div class="alert alert-info">No hay superhéroes registrados.</div>
+        <% } else { %>
+            <div class="row">
+                <% superheroes.forEach(hero => { %>
+                    <div class="col-md-4 mb-4">
+                        <div class="card hero-card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= hero.nombreSuperheroe %></h5>
+                                <h6 class="card-subtitle mb-2 text-muted"><%= hero.nombreReal %></h6>
+                                <p class="card-text">
+                                    <strong>Edad:</strong> <%= hero.edad %><br>
+                                    <strong>Planeta:</strong> <%= hero.planetaOrigen %><br>
+                                    <strong>Poderes:</strong> <%= hero.poderes.join(', ') %>
+                                </p>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <a href="/heroes/<%= hero._id %>/editar" class="btn btn-sm btn-warning">Editar</a>
+                                <form action="/heroes/<%= hero._id %>/eliminar" method="POST" class="d-inline">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este superhéroe?')">Eliminar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        <% } %>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
