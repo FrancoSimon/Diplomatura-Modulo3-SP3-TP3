@@ -18,5 +18,4 @@ const superheroSchema = new mongoose.Schema
 });
 
 const superHero = mongoose.model('SuperHero',superheroSchema,'Grupo-02');
-
 export default superHero

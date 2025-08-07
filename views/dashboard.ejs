@@ -1,59 +1,105 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de Superhéroes</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .hero-card {
-            transition: transform 0.3s;
-        }
-        .hero-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Superhéroes</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-<body>
-    <div class="container mt-4">
-        <h1 class="text-center mb-4">Dashboard de Superhéroes</h1>
-        
-        <div class="d-flex justify-content-between mb-4">
-            <h2>Lista de Superhéroes</h2>
-            <a href="/heroes/agregar" class="btn btn-primary">Agregar Superhéroe</a>
+
+<body class="bg-fixed bg-cover bg-center min-h-screen" style="background-image: url('/img/superheroes.png')">
+
+<!-- Botón fijo para agregar -->
+<a href="/api/heroes/nuevo"
+   class="absolute top-4 left-4 sm:top-5 sm:left-5  text-white text-sm sm:text-base px-3 sm:px-4 py-2 rounded-xl shadow-lg z-50 transition-all duration-200 transform hover:scale-105 active:scale-95 border-2 border-emerald-600 hover:border-emerald-300">
+  Agregar superhéroe
+</a>
+
+<!-- Sección de título -->
+<section class="min-h-screen flex flex-col justify-between items-center text-center px-4">
+  <div class="flex-grow flex items-center justify-center w-full">
+    <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 bg-clip-text text-transparent drop-shadow-2xl tracking-widest max-w-4xl break-words">
+      Superhéroes
+    </h1>
+  </div>
+  <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-yellow-100 drop-shadow-lg mb-6 sm:mb-10 tracking-wide">
+    Listado de Superhéroes
+  </h2>
+</section>
+
+<!-- Listado de superhéroes -->
+<main class="flex justify-center px-4 py-10">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-7xl">
+    <% heroes.forEach(hero => { %>
+      <article class="bg-white bg-opacity-90 border-2 border-blue-300 rounded-xl shadow-lg p-5 transition duration-300 hover:scale-105 hover:shadow-2xl hover:border-blue-500">
+        <h3 class="text-xl font-bold mb-2"><%= hero.nombreSuperheroe %></h3>
+        <p><strong>Nombre real:</strong> <%= hero.nombreReal %></p>
+        <p><strong>Edad:</strong> <%= hero.edad %></p>
+        <p><strong>Planeta de origen:</strong> <%= hero.planetaOrigen %></p>
+        <p><strong>Poderes:</strong> <%= hero.poderes %></p>
+        <p><strong>Debilidades:</strong> <%= hero.debilidad %></p>
+
+        <a class="font-bold text-blue-800" href="/api/heroes/<%= hero.id %>">Ver más</a>
+
+        <div class="mt-4 flex gap-2">
+          <a href="/api/heroes/<%= hero.id %>/editar"
+             class="bg-white text-black border border-gray-300 px-3 py-2 rounded-xl text-sm font-semibold hover:bg-gray-100">
+            Editar
+          </a>
+
+          <form id="form-<%= hero.id %>" action="/api/heroes/<%= hero.id %>?_method=DELETE" method="POST">
+            <button type="button"
+                    class="bg-gray-700 text-white px-3 py-2 rounded-xl text-sm font-semibold hover:bg-gray-800"
+                    onclick="confirmarEliminacion('<%= hero.id %>')">
+              Eliminar
+            </button>
+          </form>
         </div>
+      </article>
+    <% }) %>
+  </div>
+</main>
 
-        <% if (superheroes.length === 0) { %>
-            <div class="alert alert-info">No hay superhéroes registrados.</div>
-        <% } else { %>
-            <div class="row">
-                <% superheroes.forEach(hero => { %>
-                    <div class="col-md-4 mb-4">
-                        <div class="card hero-card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title"><%= hero.nombreSuperheroe %></h5>
-                                <h6 class="card-subtitle mb-2 text-muted"><%= hero.nombreReal %></h6>
-                                <p class="card-text">
-                                    <strong>Edad:</strong> <%= hero.edad %><br>
-                                    <strong>Planeta:</strong> <%= hero.planetaOrigen %><br>
-                                    <strong>Poderes:</strong> <%= hero.poderes.join(', ') %>
-                                </p>
-                            </div>
-                            <div class="card-footer bg-transparent">
-                                <a href="/heroes/<%= hero._id %>/editar" class="btn btn-sm btn-warning">Editar</a>
-                                <form action="/heroes/<%= hero._id %>/eliminar" method="POST" class="d-inline">
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este superhéroe?')">Eliminar</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                <% }); %>
-            </div>
-        <% } %>
-    </div>
+<script>
+  function confirmarEliminacion(heroId) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción eliminará permanentemente al superhéroe.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      customClass: {
+        popup: 'max-w-md w-full rounded-xl shadow-xl px-4',
+        title: 'text-base md:text-xl font-bold',
+        htmlContainer: 'text-sm md:text-base',
+        confirmButton: 'w-full md:w-auto text-white bg-red-600 hover:bg-red-700 px-6 py-2 rounded-xl mb-2 md:mb-0 md:mr-2',
+        cancelButton: 'w-full md:w-auto text-black border border-black hover:bg-gray-200 px-6 py-2 rounded-xl mt-2 md:mt-0'
+      },
+      buttonsStyling: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Eliminado',
+          text: 'El superhéroe fue eliminado exitosamente.',
+          icon: 'success',
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+          background: '#f9fafb',
+          color: '#1f2937',
+          iconColor: '#10b981'
+        }).then(() => {
+          document.getElementById('form-' + heroId).submit();
+        });
+      }
+    });
+  }
+</script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

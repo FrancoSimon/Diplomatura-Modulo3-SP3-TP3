@@ -1,33 +1,9 @@
 {
-  "name": "src",
-  "version": "1.0.0",
-  "description": "Sprint03 TP03",
-  "keywords": [
-    "Sprint03",
-    "node",
-    "npm",
-    "nodo",
-    "ejs"
-  ],
-  "homepage": "https://github.com/FrancoSimon/Diplomatura-Modulo3-SP3-TP3#readme",
-  "bugs": {
-    "url": "https://github.com/FrancoSimon/Diplomatura-Modulo3-SP3-TP3/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/FrancoSimon/Diplomatura-Modulo3-SP3-TP3.git"
-  },
-  "license": "ISC",
-  "author": "Franco Simon Olmedo",
-  "type": "commonjs",
-  "main": "app.mjs",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "dependencies": {
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
-    "mongoose": "^8.16.5"
+    "method-override": "^3.0.0",
+    "mongoose": "^8.16.2"
   }
 }

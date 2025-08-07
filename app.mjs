@@ -6,29 +6,43 @@
 import express from 'express';
 import {connectDB} from './config/dbconfig.mjs';
 import superHeroRoutes from './routes/superHeroRoutes.mjs'
+import path from 'path'; //agregado
+import { fileURLToPath } from 'url';//agregado
+import methodOverride from 'method-override';//agreagdo
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Configurar EJS como motor de plantillas-agregado
-app.set('view engine', 'ejs');
+// Configurar __dirname para ES Modules-agregado
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// Middleware para parsear JSON
-app.use(express.json());
+// Servir la carpeta img como estática (agrego para la imagen de fondo)
+app.use('/img', express.static(path.join(__dirname, 'img')));
+
+//middleware para leer formularios (?_method)
+app.use(express.urlencoded({ extended: true })); // para formularios HTML
+app.use(methodOverride('_method')); // para permitir PUT/DELETE desde formularios
+app.use(express.json()); // Middleware para parsear JSON
+
+// Configurar EJS - agregado
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views')); //asegura de que la carpeta views exista
+
+
 
 // Conexión a MongoDB
 connectDB();
 
 //configuracion de rutas
 app.use('/api',superHeroRoutes);
-app.use('/',superHeroRoutes); //para las vistas-agregado
 
 // Manejo de errores para rutas no encontradas
 app.use((req, res) => {
-    res.status(404).send({ mensaje: 'Ruta no encontrada' }); //probar con { title: 'Página no encontrada' }
+    res.status(404).send({ mensaje: 'Ruta no encontrada' });
 });
 
 // Iniciar el servidor
 app.listen(PORT, () => {
-    console.log(`Servidor escuchando en el puerto ${PORT}`);
+    console.log(`Servidor escuchando en http://localhost:${PORT}/api/heroes`);
 });

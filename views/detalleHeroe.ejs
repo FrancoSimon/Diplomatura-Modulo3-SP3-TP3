@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title><%= hero.nombreSuperheroe %> - Detalle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="flex items-center justify-center min-h-screen m-0 p-4 bg-cover bg-center bg-no-repeat bg-fixed" style="background-image: url('/img/superheroes.png')">
+
+  <div class="bg-white bg-opacity-90 text-gray-800 p-8 rounded-2xl shadow-2xl w-full max-w-2xl">
+    <h1 class="text-4xl font-extrabold text-center text-blue-800 mb-6">
+      <%= hero.nombreSuperheroe %>
+    </h1>
+
+    <div class="space-y-4 text-justify text-lg leading-relaxed">
+      <p><strong>Nombre real:</strong> <%= hero.nombreReal %></p>
+      <p><strong>Edad:</strong> <%= hero.edad ?? 'Desconocida' %></p>
+      <p><strong>Planeta de origen:</strong> <%= hero.planetaOrigen %></p>
+
+      <% if (hero.nombreSociedad?.length) { %>
+        <p><strong>Sociedad:</strong> <%= hero.nombreSociedad.join(', ') %></p>
+      <% } else { %>
+        <p><strong>Sociedad:</strong> No pertenece a ninguna sociedad</p>
+      <% } %>
+
+      <% if (hero.poderes?.length) { %>
+        <div>
+          <p><strong>Poderes:</strong></p>
+          <ul class="list-disc list-inside ml-4">
+            <% hero.poderes.forEach(p => { %>
+              <li><%= p %></li>
+            <% }) %>
+          </ul>
+        </div>
+      <% } else { %>
+        <p><strong>Poderes:</strong> No registrados</p>
+      <% } %>
+
+      <% if (hero.debilidad?.length) { %>
+        <div>
+          <p><strong>Debilidades:</strong></p>
+          <ul class="list-disc list-inside ml-4">
+            <% hero.debilidad.forEach(d => { %>
+              <li><%= d %></li>
+            <% }) %>
+          </ul>
+        </div>
+      <% } else { %>
+        <p><strong>Debilidades:</strong> No registradas</p>
+      <% } %>
+
+      <% if (hero.aliados?.length) { %>
+        <p><strong>Aliados:</strong> <%= hero.aliados.join(', ') %></p>
+      <% } else { %>
+        <p><strong>Aliados:</strong> Sin aliados conocidos</p>
+      <% } %>
+
+      <% if (hero.enemigos?.length) { %>
+        <p><strong>Enemigos:</strong> <%= hero.enemigos.join(', ') %></p>
+      <% } else { %>
+        <p><strong>Enemigos:</strong> Sin enemigos conocidos</p>
+      <% } %>
+
+      <% if (hero.creador?.length) { %>
+        <p><strong>Creador/es:</strong> <%= hero.creador.join(', ') %></p>
+      <% } else { %>
+        <p><strong>Creador:</strong> Información no disponible</p>
+      <% } %>
+
+      <% if (hero.subidoPor?.length) { %>
+        <p><strong>Subido por:</strong> <%= hero.subidoPor.join(', ') %></p>
+      <% } else { %>
+        <p><strong>Subido por:</strong> Desconocido</p>
+      <% } %>
+    </div>
+
+    <div class="mt-8 text-center">
+      <a href="/api/heroes" class="inline-block bg-gray-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-gray-800 transition">
+        ← Volver al listado
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>

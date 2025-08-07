@@ -6,37 +6,37 @@ permitiendo que las solicitudes HTTP se manejen de forma estructurada y predecib
 
 import express from 'express';
 import {
-    obtenerSuperheroePorIdController,
     obtenerTodosLosSuperheroesController,
-    buscarSuperheroesPorAtributoController,
-    crearSuperheroeController,
-    actualizarSuperheroeController,
-    eliminarSuperheroePorIdController,
-    eliminarSuperheroePorNombreController,
-    editarSuperheroeViewController
+    mostrarFormularioCrearSuperHeroe,
+    agregarSuperheroeController,
+    editarSuperheroeController,
+    eliminarSuperheroeController,
+    mostrarDetalleHeroe,
+    mostrarFormularioEditarSuperHeroe
 } from '../controllers/superheroesController.mjs';
 import {superheroeValidations, nombreParamValidation,idParamValidation} from '../validations/superheroesValidations.mjs';
 import { validate } from '../validations/validationmiddleware.mjs';
+import {transformarDatosSuperheroe} from '../validations/transformarDatosSuperheroe.mjs';
 
 const router = express.Router();
 
-// Vistas-agregado
-router.get('/heroes', obtenerTodosLosSuperheroesController);
-router.get('/heroes/agregar', (req, res) => res.render('addSuperhero', { title: 'Agregar Superhéroe' }));
-router.post('/heroes/agregar', superheroeValidations, validate, crearSuperheroeController);
-// Vistas para edicion - agregado
-router.get('/heroes/:id/editar', editarSuperheroeViewController);
-router.put('/heroes/:id/editar', [...idParamValidation, ...superheroeValidations], validate, actualizarSuperheroeController);
-// Ruta para eliminar (usando POST con method-override)
-router.post('/heroes/:id/eliminar', idParamValidation, validate, eliminarSuperheroePorIdController);
+//router.get('/heroes/:id', obtenerSuperheroePorIdController);//ver mas superheroe
+router.get('/heroes/nuevo', mostrarFormularioCrearSuperHeroe);//mostrar la vista crear - ruta fija antes
+router.get('/heroes/:id', mostrarDetalleHeroe);//ruta dinámica después
+//router.get('/heroes/:id', mostrarDetalleHeroe);
 
-//existentes
-router.get('/heroes', obtenerTodosLosSuperheroesController);
-router.get('/heroes/:id', obtenerSuperheroePorIdController);
-router.get('/heroes/buscar/:atributo/:valor', buscarSuperheroesPorAtributoController);
-router.post('/heroes', superheroeValidations, validate, crearSuperheroeController);
-router.put('/heroes/id/:id', [...idParamValidation, ...superheroeValidations], validate,actualizarSuperheroeController);
-router.delete('/heroes/id/:id', idParamValidation, validate, eliminarSuperheroePorIdController);
-router.delete('/heroes/nombre/:nombre', nombreParamValidation, validate, eliminarSuperheroePorNombreController);
+// mostar todos los superheroes
+router.get('/heroes', obtenerTodosLosSuperheroesController);//listado de superheroes
+
+//editar superheroe
+router.get('/heroes/:id/editar', mostrarFormularioEditarSuperHeroe);//mostrar la vista editar - agregado
+// editar - Primero transformar datos, Luego validar, editar heroe
+router.put('/heroes/:id/editar', transformarDatosSuperheroe, [...idParamValidation, ...superheroeValidations], validate, editarSuperheroeController);
+
+//agregar superheroe
+router.post('/heroes/agregar', transformarDatosSuperheroe, superheroeValidations, validate, agregarSuperheroeController); //agregar superheroe
+
+//borrar superheroe
+router.delete('/heroes/:id', idParamValidation, validate, eliminarSuperheroeController);
 
 export default router;

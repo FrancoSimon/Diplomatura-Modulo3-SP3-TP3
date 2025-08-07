@@ -3,100 +3,69 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Crear Superhéroe</title>
+  <title>Editar Superhéroe</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="flex flex-col p-3 m-0 items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat bg-fixed" style="background-image: url('/img/superheroes.png')">
+  <h1 class="text-4xl text-white font-bold mb-4">Editar Superhéroe</h1>
 
-  <h1 class="text-4xl text-white font-bold mb-4">Agregar nuevo superhéroe</h1>
+  <form id="formEditar" action="/api/heroes/<%= hero._id %>/editar?_method=PUT" method="POST" class="bg-gray-50 bg-opacity-80 text-gray-700 p-6 rounded shadow-md max-w-xl w-full">
+    <input type="hidden" name="_method" value="PUT">
 
-  <form id="formCargar" action="/api/heroes/agregar" method="POST"
-        class="bg-gray-50 bg-opacity-80 text-gray-700 p-6 rounded shadow-md max-w-xl w-full">
-    
-    <input type="hidden" name="_method" value="POST">
-
- 
-     <!-- Campo nombreSuperheroe-->
-
+    <!-- Nombre de superhéroe -->
     <div class="mb-4">
       <label class="block mb-2 font-bold">Nombre de superhéroe</label>
-    <input name="nombreSuperheroe"  class="w-full mb-1 p-2 border rounded">
-    <p class="text-red-500 text-sm mt-1 hidden" id="error-nombreSuperheroe"></p><P>
+      <input name="nombreSuperheroe" value="<%= hero.nombreSuperheroe %>" class="text-black w-full mb-1 p-2 border rounded">
+      <p class="text-red-500 text-sm mt-1 hidden" id="error-nombreSuperheroe"></p>
     </div>
 
-    <!-- Campo nombreReal -->
-    <div class="mb-4 ">
+    <!-- Nombre real -->
+    <div class="mb-4">
       <label class="block mb-2 font-bold">Nombre real</label>
-    <input name="nombreReal"  class="w-full mb-1 p-2 border rounded">
-    <p class="text-red-500 text-sm mt-1 hidden" id="error-nombreReal"></p>
-
+      <input name="nombreReal" value="<%= hero.nombreReal %>" class="text-black w-full mb-1 p-2 border rounded">
+      <p class="text-red-500 text-sm mt-1 hidden" id="error-nombreReal"></p>
     </div>
 
-        <!-- Campo nombreSociedad -->
+    <!-- Nombre Sociedad -->
     <div class="mb-4">
       <label class="block mb-2 font-bold">Nombre Sociedad</label>
-    <input name="nombreSociedad"  class="w-full mb-1 p-2 border rounded">
-
+      <input name="nombreSociedad" value="<%= hero.nombreSociedad %>" class="text-black w-full mb-1 p-2 border rounded">
     </div>
 
-    <!-- Campo edad -->
+    <!-- Edad -->
     <div class="mb-4">
       <label class="block mb-2 font-bold">Edad</label>
-    <input type="number" name="edad"  class="w-full mb-1 p-2 border rounded">
-    <p class="text-red-500 text-sm mt-1 hidden" id="error-edad"></p>
+      <input type="number" name="edad" value="<%= hero.edad %>" class="text-black w-full mb-1 p-2 border rounded">
+      <p class="text-red-500 text-sm mt-1 hidden" id="error-edad"></p>
     </div>
 
-    <!-- Campo planetaOrigen -->
+    <!-- Planeta de origen -->
     <div class="mb-4">
       <label class="block mb-2 font-bold">Planeta de origen</label>
-    <input name="planetaOrigen"  class="w-full mb-1 p-2 border rounded">
-    <p class="text-red-500 text-sm mt-1 hidden" id="error-planetaOrigen"></p>
+      <input name="planetaOrigen" value="<%= hero.planetaOrigen %>" class="text-black w-full mb-1 p-2 border rounded">
+      <p class="text-red-500 text-sm mt-1 hidden" id="error-planetaOrigen"></p>
     </div>
 
-    <!-- Campo poderes -->
+    <!-- Poderes -->
     <div class="mb-4">
       <label class="block mb-2 font-bold">Poderes (separados por coma)</label>
-    <input name="poderes"  class="w-full mb-1 p-2 border rounded">
-    <p class="text-red-500 text-sm mt-1 hidden" id="error-poderes"></p>
+      <input name="poderes" value="<%= hero.poderes.join(', ') %>" class="text-black w-full mb-1 p-2 border rounded">
+      <p class="text-red-500 text-sm mt-1 hidden" id="error-poderes"></p>
     </div>
 
-    <!-- Campo debilidad -->
+    <!-- Debilidad -->
     <div class="mb-4">
       <label class="block mb-2 font-bold">Debilidad (separadas por coma)</label>
-    <input name="debilidad"  class="w-full mb-1 p-2 border rounded">
-    <p class="text-red-500 text-sm mt-1 hidden" id="error-debilidad"></p>
+      <input name="debilidad" value="<%= hero.debilidad.join(', ') %>" class="text-black w-full mb-1 p-2 border rounded">
+      <p class="text-red-500 text-sm mt-1 hidden" id="error-debilidad"></p>
     </div>
 
-    <!-- Campo aliados -->
-    <div class="mb-4">
-      <label class="block mb-2 font-bold">Aliados (separadas por coma)</label>
-    <input name="aliados"  class="w-full mb-1 p-2 border rounded">
-    </div>
-
-        <!-- Campo enemigos -->
-    <div class="mb-4">
-      <label class="block mb-2 font-bold">Enemigos (separados por coma)</label>
-    <input name="enemigos"  class="w-full mb-1 p-2 border rounded">
-    </div>
-
-        <!-- Campo creador -->
-    <div class="mb-4">
-      <label class="block mb-2 font-bold">Creador</label>
-    <input name="creador"  class="w-full mb-1 p-2 border rounded">
-       </div>
-
-        <!-- Campo subidoPor -->
-    <div class="mb-4">
-      <label class="block mb-2 font-bold">Subido Por</label>
-    <input name="subidoPor"  class="w-full mb-1 p-2 border rounded">
-     <p class="text-red-500 text-sm mt-1 hidden" id="error-subidoPor"></p>
-    
-    </div>
-
+    <!-- Botones -->
     <div class="flex space-x-4">
       <button type="submit" class="flex-1 bg-gray-700 text-white px-6 py-2 rounded-xl font-semibold hover:bg-gray-800 text-center">
-        Crear Superhéroe
+        Editar Superhéroe
       </button>
       <a href="/api/heroes" class="flex-1 bg-white text-black border border-black px-6 py-2 rounded-xl font-semibold hover:bg-gray-100 text-center">
         Cancelar
@@ -104,10 +73,11 @@
     </div>
   </form>
 
+  <!-- Validación + Confirmación -->
   <script>
-    document.getElementById('formCargar').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const campos = ['nombreSuperheroe', 'nombreReal', 'edad', 'planetaOrigen', 'poderes', 'debilidad', 'subidoPor'];
+    document.getElementById('formEditar').addEventListener('submit', function (e) {
+      e.preventDefault(); // Previene envío inmediato
+      const campos = ['nombreSuperheroe', 'nombreReal', 'edad', 'planetaOrigen', 'poderes', 'debilidad'];
       let hayErrores = false;
 
       campos.forEach(campo => {
@@ -116,17 +86,13 @@
         const errorMsg = document.getElementById('error-' + campo);
 
         input.classList.remove('border-red-500');
-        if (errorMsg) {
-          errorMsg.classList.add('hidden');
-          errorMsg.textContent = '';
-        }
+        errorMsg.classList.add('hidden');
+        errorMsg.textContent = '';
 
         if (!valor) {
           input.classList.add('border-red-500');
-          if (errorMsg) {
-            errorMsg.textContent = "Este campo es obligatorio.";
-            errorMsg.classList.remove('hidden');
-          }
+          errorMsg.textContent = "Este campo es obligatorio.";
+          errorMsg.classList.remove('hidden');
           hayErrores = true;
         } else {
           switch (campo) {
@@ -135,20 +101,16 @@
             case 'debilidad':
               if (valor.length < 3 || valor.length > 60) {
                 input.classList.add('border-red-500');
-                if (errorMsg) {
-                  errorMsg.textContent = "Debe tener entre 3 y 60 caracteres.";
-                  errorMsg.classList.remove('hidden');
-                }
+                errorMsg.textContent = "Debe tener entre 3 y 60 caracteres.";
+                errorMsg.classList.remove('hidden');
                 hayErrores = true;
               }
               break;
             case 'edad':
               if (!/^\d+$/.test(valor) || parseInt(valor) < 0) {
                 input.classList.add('border-red-500');
-                if (errorMsg) {
-                  errorMsg.textContent = "La edad debe ser un número entero positivo.";
-                  errorMsg.classList.remove('hidden');
-                }
+                errorMsg.textContent = "La edad debe ser un número entero positivo.";
+                errorMsg.classList.remove('hidden');
                 hayErrores = true;
               }
               break;
@@ -156,17 +118,13 @@
               const poderes = valor.split(',').map(p => p.trim()).filter(p => p.length > 0);
               if (poderes.length === 0) {
                 input.classList.add('border-red-500');
-                if (errorMsg) {
-                  errorMsg.textContent = "Debe ingresar al menos un poder, separados por coma.";
-                  errorMsg.classList.remove('hidden');
-                }
+                errorMsg.textContent = "Debe ingresar al menos un poder, separados por coma.";
+                errorMsg.classList.remove('hidden');
                 hayErrores = true;
               } else if (!poderes.every(p => p.length >= 3 && p.length <= 60)) {
                 input.classList.add('border-red-500');
-                if (errorMsg) {
-                  errorMsg.textContent = "Cada poder debe tener entre 3 y 60 caracteres.";
-                  errorMsg.classList.remove('hidden');
-                }
+                errorMsg.textContent = "Cada poder debe tener entre 3 y 60 caracteres.";
+                errorMsg.classList.remove('hidden');
                 hayErrores = true;
               }
               break;
@@ -174,17 +132,17 @@
         }
       });
 
-      if (hayErrores) return;
+   if (hayErrores) return;
 
       Swal.fire({
-        title: '¿Crear superhéroe?',
-        text: '¿Deseas guardar este nuevo superhéroe en la base de datos?',
+        title: '¿Editar superhéroe?',
+        text: '¿Desea editar este superhéroe en la base de datos?',
         icon: 'question',
         background: '#f9fafb',
         color: '#1f2937',
         iconColor: '#374151',
         showCancelButton: true,
-        confirmButtonText: 'Sí, crear',
+        confirmButtonText: 'Sí, editar',
         cancelButtonText: 'Cancelar',
         confirmButtonColor: '#374151',
         cancelButtonColor: '#ffffff',
@@ -199,8 +157,8 @@
       }).then((result) => {
         if (result.isConfirmed) {
           Swal.fire({
-            title: 'Superhéroe creado',
-            text: 'El superhéroe ha sido guardado exitosamente.',
+            title: 'Superhéroe Editado',
+            text: 'El superhéroe ha sido editado exitosamente.',
             icon: 'success',
             background: '#f9fafb',
             color: '#1f2937',
@@ -222,4 +180,3 @@
   </script>
 </body>
 </html>
-
